@@ -1,9 +1,7 @@
 import enum
 
-from ....model import Page
 
-
-class PageBarcoCom(Page):
+class PageBarcoCom:
 
     @enum.unique
     class Language(enum.Enum):
@@ -24,8 +22,7 @@ class PageBarcoCom(Page):
         self.language = language
         self.region = region
         self.url_path = url_path
-
-        super().__init__(f"https://www.barco.com/{language.value}/{url_path}")
+        self.url = f"https://www.barco.com/{language.value}/{url_path}"
 
     @property
     def one_trust_button(self) -> str:
