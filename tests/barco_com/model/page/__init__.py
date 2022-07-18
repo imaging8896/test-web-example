@@ -1,0 +1,1 @@
+from .page_main import PageBarcoCom

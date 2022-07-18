@@ -1,3 +1,3 @@
-from .fixture_language import barco_com_language
-from .fixture_page_clickshare_support import page_barco_com_clickshare_support
-from .fixture_region import barco_com_region
+from .page_language import page_language
+from .page_region import page_region
+from .page import page_clickshare_support_get_warranty_info

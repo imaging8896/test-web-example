@@ -1,6 +1,6 @@
 import enum
 
-from ...model import Page
+from ....model import Page
 
 
 class PageBarcoCom(Page):
@@ -26,3 +26,7 @@ class PageBarcoCom(Page):
         self.url_path = url_path
 
         super().__init__(f"https://www.barco.com/{language.value}/{url_path}")
+
+    @property
+    def one_trust_button(self) -> str:
+        return ".//div[@id='onetrust-button-group']/div/button"
