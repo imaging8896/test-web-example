@@ -3,6 +3,7 @@ import pytest
 from .driver import selenium_driver, capture_screenshot_on_test_failed
 from .user import browser_user
 
+
 # set up a hook to be able to check if a test has failed
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
