@@ -4,11 +4,15 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.chrome.options import Options
 
 
 @pytest.fixture(scope='session', params=[
-    ("chrome", Service(ChromeDriverManager().install())),
+    # This will ask your Chrome/Firefox binary version
+    # Testing multi-version for a browser needs change browser binary and re-run test.
+    ("chrome",  Service(ChromeDriverManager().install())), 
+    ("firefox", Service(GeckoDriverManager().install())),
 ])
 def selenium_driver(request):
     browser, browser_driver_service = request.param
@@ -19,7 +23,8 @@ def selenium_driver(request):
     # chrome_options.add_argument('--disable-dev-shm-usage')
 
     driver = {
-        "chrome": webdriver.Chrome
+        "chrome": webdriver.Chrome,
+        "firefox": webdriver.Firefox,
     }[browser](service=browser_driver_service)
     yield driver
     driver.quit()
