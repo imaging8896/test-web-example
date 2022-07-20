@@ -1,4 +1,4 @@
-import pytest
+import pytest, time
 
 from typing import Callable
 
@@ -23,15 +23,13 @@ class BrowserUser:
         self.driver = driver
         self.trusted_cookies_domain = set()
 
-    def browse(self, url: str) -> str:
-    # def browse(self, url: str, trust_cookies_func: Callable[[], None]) -> str:
+    def browse(self, url: str, trust_cookies_func: Callable[[], None]) -> str:
         self.driver.get(url)
 
-        # Bug for trust cookies
-        # domain = parse.urlparse(url).netloc
-        # if domain not in self.trusted_cookies_domain:
-        #     trust_cookies_func()
-        #     self.trusted_cookies_domain.add(domain)
+        domain = parse.urlparse(url).netloc
+        if domain not in self.trusted_cookies_domain:
+            trust_cookies_func()
+            self.trusted_cookies_domain.add(domain)
 
     def wait_to_see_webpage_url(self, url: str, timeout_seconds: int) -> bool:
         try:
@@ -59,12 +57,18 @@ class BrowserUser:
     def see_element_text(self, xpath: str) -> str:
         return self.locate_element(xpath).text 
 
+    def see_element_value(self, xpath: str) -> str:
+        return self.locate_element(xpath).get_attribute("value") 
+
     def hover_over(self, xpath: str) -> webelement.WebElement:
         element = self.locate_element(xpath)
         ActionChains(self.driver).move_to_element(element).perform()
 
     def see_element_css_property(self, xpath: str, css_property: str) -> str:
         return self.locate_element(xpath).value_of_css_property(css_property)
+
+    def fill_in_input_value(self, xpath: str, fill_in_value: str) -> str:
+        self.locate_element(xpath).send_keys(fill_in_value)
 
     def wait_to_get_elements(self, xpath: str, timeout_seconds: int) -> list[webelement.WebElement]:
         try:

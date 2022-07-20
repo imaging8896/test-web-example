@@ -1,3 +1,4 @@
+from .data_warranty_info import data_warranty_info
 from .page_language import page_language
 from .page_region import page_region
 from .page import get_page_trust_cookies_func, page_clickshare_support_get_warranty_info
