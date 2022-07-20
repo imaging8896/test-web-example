@@ -25,5 +25,5 @@ class PageBarcoCom:
         self.url = f"https://www.barco.com/{language.value}/{url_path}"
 
     @property
-    def one_trust_button(self) -> str:
+    def trust_cookies_button(self) -> str:
         return ".//div[@id='onetrust-button-group']/div/button"
