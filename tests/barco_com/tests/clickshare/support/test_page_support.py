@@ -93,11 +93,13 @@ def test_user_can_see_correct_warranty_results_ui_components(browser_user, page_
 
     assert_that(browser_user.see_element_text(results_header_text), equal_to(f"Warranty results for {data_warranty_info.serial_num}"))
     assert_that(browser_user.see_element_text(results_header_serial_num_text), equal_to(data_warranty_info.serial_num))
-
-    if browser_user.driver.name == "chrome":
-        assert_that(browser_user.see_element_css_property(results_header_serial_num_text, "color"), equal_to("rgba(240, 0, 0, 1)"))
-    else:
-        assert_that(browser_user.see_element_css_property(results_header_serial_num_text, "color"), equal_to("rgb(240, 0, 0)"))
+    assert_that(browser_user.see_element_css_property(results_header_serial_num_text, "color"), equal_to(
+        {
+            "chrome":  "rgba(240, 0, 0, 1)",
+            "firefox": "rgb(240, 0, 0)",
+            "msedge":  "rgba(240, 0, 0, 1)",
+        }[browser_user.driver.name]
+    ))
     del results_header_text
     del results_header_serial_num_text
 
@@ -166,11 +168,13 @@ def test_user_can_see_incorrect_warranty_results_ui_components(browser_user, pag
 
     assert_that(browser_user.see_element_text(error_results_header_text), equal_to(f"Warranty results for {incorrect_serial_num}"))
     assert_that(browser_user.see_element_text(error_results_header_serial_num_text), equal_to(incorrect_serial_num))
-
-    if browser_user.driver.name == "chrome":
-        assert_that(browser_user.see_element_css_property(error_results_header_serial_num_text, "color"), equal_to("rgba(240, 0, 0, 1)"))
-    else:
-        assert_that(browser_user.see_element_css_property(error_results_header_serial_num_text, "color"), equal_to("rgb(240, 0, 0)"))
+    assert_that(browser_user.see_element_css_property(error_results_header_serial_num_text, "color"), equal_to(
+        {
+            "chrome":  "rgba(240, 0, 0, 1)",
+            "firefox": "rgb(240, 0, 0)",
+            "msedge":  "rgba(240, 0, 0, 1)",
+        }[browser_user.driver.name]
+    ))
     del error_results_header_text
     del error_results_header_serial_num_text
 
@@ -279,8 +283,11 @@ def test_user_cannot_get_warranty_results_without_serial_number(browser_user, pa
     error_span = user_see_error_spans[0]
 
     assert_that(error_span.text, equal_to("Please specify a serial number"))
-    if browser_user.driver.name == "chrome":
-        assert_that(error_span.value_of_css_property("color"), equal_to("rgba(224, 32, 32, 1)"))
-    else:
-        assert_that(error_span.value_of_css_property("color"), equal_to("rgb(224, 32, 32)"))
+    assert_that(error_span.value_of_css_property("color"), equal_to(
+        {
+            "chrome":  "rgba(224, 32, 32, 1)",
+            "firefox": "rgb(224, 32, 32)",
+            "msedge":  "rgba(224, 32, 32, 1)",
+        }[browser_user.driver.name]
+    ))
     del serial_num_error_spans

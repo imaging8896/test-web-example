@@ -4,29 +4,42 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
 
+# webdriver_manager not support Safari
+# webdriver_manager support ChromeDriver, GeckoDriver, IEDriver, OperaDriver, EdgeChromiumDriver
+# Need get driver binary by my own...
 
 chrome_options = ChromeOptions()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox') # Bypass OS security model
 chrome_options.add_argument('--disable-dev-shm-usage') # overcome limited resource problems
 chrome_options.add_argument("--start-maximized")
+# chrome_options.binary_location = xxx # 這邊可以指定測試 browser 版本
 
 firefox_options = FirefoxOptions()
 firefox_options.add_argument('--headless')
 firefox_options.add_argument('--no-sandbox') # Bypass OS security model
 firefox_options.add_argument('--disable-dev-shm-usage') # overcome limited resource problems
 
+edge_options = EdgeOptions()
+edge_options.add_argument('--headless')
+edge_options.add_argument('--no-sandbox') # Bypass OS security model
+edge_options.add_argument('--disable-dev-shm-usage') # overcome limited resource problems
+
 
 @pytest.fixture(scope='session', params=[
-    # This will ask your Chrome/Firefox binary version
-    # Testing multi-version for a browser needs change browser binary and re-run test.
+    # This will ask your Chrome/Firefox/Edge binary version
+    # Testing multi-version for one browser needs to set the browser binary location in option above.
     ("chrome",  ChromeService(ChromeDriverManager().install()), chrome_options), 
     ("firefox", FirefoxService(GeckoDriverManager().install()),  firefox_options),
+    ("edge",    EdgeService(EdgeChromiumDriverManager().install()),  edge_options),
 ])
 def selenium_driver(request):
     browser, browser_driver_service, browser_options = request.param
@@ -35,6 +48,8 @@ def selenium_driver(request):
          driver = webdriver.Chrome(service=browser_driver_service, options=browser_options)
     elif browser == "firefox":
          driver = webdriver.Firefox(service=browser_driver_service, options=browser_options)
+    elif browser == "edge":
+         driver = webdriver.Edge(service=browser_driver_service, options=browser_options)
     else:
         raise Exception(f"Unknown browser `{browser}`")
     yield driver
