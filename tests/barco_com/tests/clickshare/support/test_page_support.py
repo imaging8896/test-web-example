@@ -74,9 +74,17 @@ def test_user_can_see_correct_warranty_results_ui_components(browser_user, page_
     browser_user.click(get_info_button)
     del get_info_button
 
-    results_div = page.warranty_results_component.results_div
-    assert_that(browser_user.wait_until_element_visible(results_div, timeout_wait_for_results), is_(True))
-    del results_div
+    get_warranty_info_loading = page.get_warranty_info_component.body_get_info_button_loading
+    assert_that(browser_user.wait_until_element_visible(get_warranty_info_loading, 2), is_(True))
+    assert_that(browser_user.wait_until_element_invisible(get_warranty_info_loading, timeout_wait_for_results), is_(True))
+    del get_warranty_info_loading
+
+    results_article = page.warranty_results_component.results_article
+    error_results_div = page.warranty_results_component.error_results_div
+    assert_that(browser_user.see_element(results_article), is_(True))
+    assert_that(browser_user.see_element(error_results_div), is_(False))
+    del results_article
+    del error_results_div
 
     results_header_text =            page.warranty_results_component.header_text
     results_header_serial_num_text = page.warranty_results_component.header_serial_num_text
@@ -86,7 +94,6 @@ def test_user_can_see_correct_warranty_results_ui_components(browser_user, page_
     assert_that(browser_user.see_element_text(results_header_text), equal_to(f"Warranty results for {data_warranty_info.serial_num}"))
     assert_that(browser_user.see_element_text(results_header_serial_num_text), equal_to(data_warranty_info.serial_num))
 
-    print(browser_user.driver.name)
     if browser_user.driver.name == "chrome":
         assert_that(browser_user.see_element_css_property(results_header_serial_num_text, "color"), equal_to("rgba(240, 0, 0, 1)"))
     else:
@@ -140,9 +147,17 @@ def test_user_can_see_incorrect_warranty_results_ui_components(browser_user, pag
     browser_user.click(get_info_button)
     del get_info_button
 
-    results_div = page.warranty_results_component.results_div
-    assert_that(browser_user.wait_until_element_visible(results_div, timeout_wait_for_results), is_(True))
-    del results_div
+    get_warranty_info_loading = page.get_warranty_info_component.body_get_info_button_loading
+    assert_that(browser_user.wait_until_element_visible(get_warranty_info_loading, 2), is_(True))
+    assert_that(browser_user.wait_until_element_invisible(get_warranty_info_loading, timeout_wait_for_results), is_(True))
+    del get_warranty_info_loading
+
+    results_article = page.warranty_results_component.results_article
+    error_results_div = page.warranty_results_component.error_results_div
+    assert_that(browser_user.see_element(results_article), is_(False))
+    assert_that(browser_user.see_element(error_results_div), is_(True))
+    del results_article
+    del error_results_div
 
     error_results_header_text =            page.warranty_results_component.error_header_text
     error_results_header_serial_num_text = page.warranty_results_component.error_header_serial_num_text
@@ -152,7 +167,6 @@ def test_user_can_see_incorrect_warranty_results_ui_components(browser_user, pag
     assert_that(browser_user.see_element_text(error_results_header_text), equal_to(f"Warranty results for {incorrect_serial_num}"))
     assert_that(browser_user.see_element_text(error_results_header_serial_num_text), equal_to(incorrect_serial_num))
 
-    print(browser_user.driver.name)
     if browser_user.driver.name == "chrome":
         assert_that(browser_user.see_element_css_property(error_results_header_serial_num_text, "color"), equal_to("rgba(240, 0, 0, 1)"))
     else:
@@ -206,9 +220,9 @@ def test_user_can_get_warranty_results_for_correct_serial_number(browser_user, p
     browser_user.click(get_info_button)
     del get_info_button
 
-    results_div = page.warranty_results_component.results_div
-    assert_that(browser_user.wait_until_element_visible(results_div, timeout_wait_for_results), is_(True))
-    del results_div
+    results_article = page.warranty_results_component.results_article
+    assert_that(browser_user.wait_until_element_visible(results_article, timeout_wait_for_results), is_(True))
+    del results_article
 
     for field_text, expect_text in [
         (page.warranty_results_component.desc_text, data_warranty_info.desc),
@@ -225,3 +239,48 @@ def test_user_can_get_warranty_results_for_correct_serial_number(browser_user, p
     assert_that(len(browser_user.wait_to_get_elements(results_image, 5)), equal_to(1))
     assert_that(browser_user.see_element_attribute(results_image, "src"), equal_to(data_warranty_info.image_url))
     del results_image
+
+
+@pytest.mark.parametrize("timeout_wait_for_results", [10]) # XXX Issue
+def test_user_cannot_get_warranty_results_without_serial_number(browser_user, page_clickshare_support_get_warranty_info, get_page_trust_cookies_func, timeout_wait_for_results):
+    page = page_clickshare_support_get_warranty_info
+
+    browser_user.browse(page.url, get_page_trust_cookies_func(browser_user, page))
+    assert_that(browser_user.wait_to_see_webpage_url(page.url, 5), is_(True))
+
+    serial_num_input = page.get_warranty_info_component.body_serial_num_input
+    assert_that(len(browser_user.wait_to_get_elements(serial_num_input, 3)), equal_to(1))
+
+    browser_user.fill_in_input_value(serial_num_input, "")
+
+    assert_that(browser_user.see_element_attribute(serial_num_input, "value"), equal_to(""))
+    del serial_num_input
+
+    get_info_button = page.get_warranty_info_component.body_get_info_button
+    assert_that(len(browser_user.wait_to_get_elements(get_info_button, 3)), equal_to(1))
+    browser_user.click(get_info_button)
+    del get_info_button
+
+    get_warranty_info_loading = page.get_warranty_info_component.body_get_info_button_loading
+    assert_that(browser_user.wait_until_element_visible(get_warranty_info_loading, 5), is_(False))
+    del get_warranty_info_loading
+
+    results_article = page.warranty_results_component.results_article
+    error_results_div = page.warranty_results_component.error_results_div
+    assert_that(browser_user.see_element(results_article), is_(False))
+    assert_that(browser_user.see_element(error_results_div), is_(False))
+    del results_article
+    del error_results_div
+
+    serial_num_error_spans = page.get_warranty_info_component.body_serial_num_error_spans
+    assert_that(browser_user.wait_until_element_visible(serial_num_error_spans, 5), is_(True))
+    user_see_error_spans = browser_user.see_elements(serial_num_error_spans)
+    assert_that(len(user_see_error_spans), equal_to(1))
+    error_span = user_see_error_spans[0]
+
+    assert_that(error_span.text, equal_to("Please specify a serial number"))
+    if browser_user.driver.name == "chrome":
+        assert_that(error_span.value_of_css_property("color"), equal_to("rgba(224, 32, 32, 1)"))
+    else:
+        assert_that(error_span.value_of_css_property("color"), equal_to("rgb(224, 32, 32)"))
+    del serial_num_error_spans

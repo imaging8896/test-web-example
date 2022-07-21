@@ -46,18 +46,35 @@ class BrowserUser:
         elements = self.locate_elements(xpath)
         if elements:
             if len(elements) > 1:
-                raise Exception(f"User unable to determine which element to click. Got `{elements}` for xpath `{xpath}`")
+                raise Exception(f"User unable to determine which element is. Got `{elements}` for xpath `{xpath}`")
             return elements[0]
         else:
-            raise Exception(f"User unable to find xpath `{xpath}` to click")
+            raise Exception(f"User unable to find xpath `{xpath}`")
 
     def click(self, xpath: str):
+        if not self.see_element(xpath):
+            raise Exception(f"Unable to click on an invisible element `{xpath}`")
         self.locate_element(xpath).click()
 
+    def see_elements(self, xpath: str) -> list[webelement.WebElement]:
+        return [x for x in self.locate_elements(xpath) if x.is_displayed()]
+
+    def see_element(self, xpath: str) -> bool:
+        if elements := self.locate_elements(xpath):
+            if len(elements) > 1:
+                raise Exception(f"User unable to determine which element is. Got `{elements}` for xpath `{xpath}`")
+            return elements[0].is_displayed()
+        else:
+            return False
+
     def see_element_text(self, xpath: str) -> str:
+        if not self.see_element(xpath):
+            return None
         return self.locate_element(xpath).text 
 
     def see_element_attribute(self, xpath: str, attribute_name: str) -> str:
+        if not self.see_element(xpath):
+            return None
         return self.locate_element(xpath).get_attribute(attribute_name)
 
     def hover_over(self, xpath: str) -> webelement.WebElement:
@@ -65,6 +82,8 @@ class BrowserUser:
         ActionChains(self.driver).move_to_element(element).perform()
 
     def see_element_css_property(self, xpath: str, css_property: str) -> str:
+        if not self.see_element(xpath):
+            return None
         return self.locate_element(xpath).value_of_css_property(css_property)
 
     def fill_in_input_value(self, xpath: str, fill_in_value: str) -> str:
@@ -109,7 +128,7 @@ class BrowserUser:
     def wait_until_element_visible(self, xpath: str, timeout_seconds: int) -> bool:
         try:
             if WebDriverWait(self.driver, timeout_seconds).until(
-                    expected_conditions.visibility_of_element_located((By.XPATH, xpath))
+                    expected_conditions.visibility_of_any_elements_located((By.XPATH, xpath))
                 ):
                 return True
             return False
