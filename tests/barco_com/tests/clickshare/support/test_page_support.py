@@ -63,7 +63,7 @@ def test_user_can_see_correct_warranty_results_ui_components(browser_user, page_
 
     browser_user.fill_in_input_value(serial_num_input, data_warranty_info.serial_num)
 
-    assert_that(browser_user.see_element_value(serial_num_input), equal_to(data_warranty_info.serial_num))
+    assert_that(browser_user.see_element_attribute(serial_num_input, "value"), equal_to(data_warranty_info.serial_num))
     del serial_num_input
 
     get_info_button = page.get_warranty_info_component.body_get_info_button
@@ -87,4 +87,36 @@ def test_user_can_see_correct_warranty_results_ui_components(browser_user, page_
     del results_header_text
     del results_header_serial_num_text
 
+    results_fields_headers = page.warranty_results_component.fields_headers
+    results_fields =         page.warranty_results_component.fields
+    assert_that(len(browser_user.wait_to_get_elements(results_fields_headers, 5)), equal_to(6))
+    assert_that(len(browser_user.wait_to_get_elements(results_fields, 5)), equal_to(6))
+    del results_fields_headers
+    del results_fields
 
+    for field_header_text, expect_header_text in [
+        (page.warranty_results_component.desc_header_text, "Description"),
+        (page.warranty_results_component.part_num_header_text, "Part number"),
+        (page.warranty_results_component.delivery_date_header_text, "Delivery date"),
+        (page.warranty_results_component.installation_date_header_text, "Installation date"),
+        (page.warranty_results_component.warranty_end_date_header_text, "Warranty end date"),
+        (page.warranty_results_component.service_contract_end_date_header_text, "Service contract end date"),
+    ]:
+        assert_that(len(browser_user.wait_to_get_elements(field_header_text, 5)), equal_to(1))
+        assert_that(browser_user.see_element_text(field_header_text), equal_to(expect_header_text))
+
+    for field_text, expect_text in [
+        (page.warranty_results_component.desc_text, data_warranty_info.desc),
+        (page.warranty_results_component.part_num_text, data_warranty_info.part_num),
+        (page.warranty_results_component.delivery_date_text, data_warranty_info.delivery_date),
+        (page.warranty_results_component.installation_date_text, data_warranty_info.installation_date),
+        (page.warranty_results_component.warranty_end_date_text, data_warranty_info.warranty_end_date),
+        (page.warranty_results_component.service_contract_end_date_text, data_warranty_info.service_contract_end_date),
+    ]:
+        assert_that(len(browser_user.wait_to_get_elements(field_text, 5)), equal_to(1))
+        assert_that(browser_user.see_element_text(field_text), equal_to(expect_text))
+        
+    results_image = page.warranty_results_component.image
+    assert_that(len(browser_user.wait_to_get_elements(results_image, 5)), equal_to(1))
+    assert_that(browser_user.see_element_attribute(results_image, "src"), equal_to(data_warranty_info.image_url))
+    del results_image

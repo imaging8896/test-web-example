@@ -57,8 +57,8 @@ class BrowserUser:
     def see_element_text(self, xpath: str) -> str:
         return self.locate_element(xpath).text 
 
-    def see_element_value(self, xpath: str) -> str:
-        return self.locate_element(xpath).get_attribute("value") 
+    def see_element_attribute(self, xpath: str, attribute_name: str) -> str:
+        return self.locate_element(xpath).get_attribute(attribute_name)
 
     def hover_over(self, xpath: str) -> webelement.WebElement:
         element = self.locate_element(xpath)
