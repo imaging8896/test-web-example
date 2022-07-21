@@ -1,5 +1,5 @@
 # test-web-example
-It's a example automated test for a web. 
+It's an example automated test for a web. 
 
 ## Prerequisite
 1. Python 3.9 or 3.10, use `tox` to run all Python versiosn, and you can skip some Python versions by removing the Python version in `tox.ini`. You can install Python versions from [here](https://www.python.org/downloads/)
