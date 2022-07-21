@@ -15,6 +15,7 @@ from selenium.webdriver.edge.options import Options as EdgeOptions
 # webdriver_manager not support Safari
 # webdriver_manager support ChromeDriver, GeckoDriver, IEDriver, OperaDriver, EdgeChromiumDriver
 # Need get driver binary by my own...
+# See https://pypi.org/project/webdriver-manager/
 
 chrome_options = ChromeOptions()
 chrome_options.add_argument('--headless')
