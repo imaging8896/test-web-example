@@ -9,6 +9,8 @@ from hamcrest import assert_that, equal_to, is_, is_in
     "123456789",
     "123456789123456789",
     "123456789123456789123456789123456789",
+    "asdasd",
+    "a12b34c33-ffasd-fff",
 ])
 @pytest.mark.parametrize("timeout_wait_for_results", [10]) # XXX Issue
 def test_user_can_see_incorrect_warranty_results_ui_components(browser_user, page_clickshare_support_get_warranty_info, incorrect_serial_num, get_page_trust_cookies_func, timeout_wait_for_results):

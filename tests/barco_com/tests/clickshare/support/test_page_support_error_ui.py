@@ -54,6 +54,8 @@ def test_user_cannot_get_warranty_results_without_serial_number(browser_user, pa
     "1", 
     "2",
     "12345",
+    "a",
+    "bac12",
     "  ",
     "@",
     "$"
@@ -110,6 +112,7 @@ def test_user_cannot_get_warranty_results_with_less_6_chars_serial_number(browse
     "123456789123456789123456789123456789",
     pytest.param("      ", marks=pytest.mark.skip(reason="6 spaces count as valid serial number")),
     "!@#$%^",
+    "a12b34c33-ffasd-fff",
 ])
 def test_user_cannot_get_warranty_results_with_invalid_serial_number(browser_user, page_clickshare_support_get_warranty_info, get_page_trust_cookies_func, invalid_serial_num):
     page = page_clickshare_support_get_warranty_info
