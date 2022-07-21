@@ -115,7 +115,10 @@ def test_user_can_see_correct_warranty_results_ui_components(browser_user, page_
 
 @pytest.mark.parametrize("incorrect_serial_num", [
     "1963552439", 
-    "0000000000"
+    "0000000000",
+    "123456789",
+    "123456789123456789",
+    "123456789123456789123456789123456789",
 ])
 @pytest.mark.parametrize("timeout_wait_for_results", [10]) # XXX Issue
 def test_user_can_see_incorrect_warranty_results_ui_components(browser_user, page_clickshare_support_get_warranty_info, incorrect_serial_num, get_page_trust_cookies_func, timeout_wait_for_results):
