@@ -22,7 +22,8 @@ class PageBarcoCom:
         self.language = language
         self.region = region
         self.url_path = url_path
-        self.url = f"https://www.barco.com/{language.value}/{url_path}"
+        self.domain = "https://www.barco.com"
+        self.url = f"{self.domain}/{language.value}/{url_path}"
 
     @property
     def trust_cookies_button(self) -> str:

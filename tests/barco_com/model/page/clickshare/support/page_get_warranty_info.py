@@ -25,10 +25,16 @@ class ComponentGetWarrantyInfo:
 
 
 class ComponentWarrantyResults:
-    root = ".//div[@class='content-body']/section/div/div[2]/div/div"
+    results_div = f".//div[@class='content-body']/section/div/div[2]"
+    root =        f"{results_div}/div/div"
 
     header_text =            f"{root}/article/div/h2"
     header_serial_num_text = f"{root}/article/div/h2/span"
+
+    error_header_text =            f"{root}/div/h2"
+    error_header_serial_num_text = f"{root}/div/h2/span"
+    error_p =                      f"{root}/div/div/p"
+    error_link =                   f"{root}/div/div/a"
 
     image = f"{root}/article/div/div/div[1]/div/div/img"
 

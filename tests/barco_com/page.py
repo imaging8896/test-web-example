@@ -14,7 +14,7 @@ def get_page_trust_cookies_func():
             assert_that(browser_user.wait_element_clickable(trust_cookies_button, 10), is_(True))
 
             browser_user.click(trust_cookies_button)
-            assert_that(browser_user.wait_until_element_invisible(trust_cookies_button, 5))
+            assert_that(browser_user.wait_until_element_invisible(trust_cookies_button, 5), is_(True))
         return _func
     return _prepare_func
 

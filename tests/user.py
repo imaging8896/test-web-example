@@ -106,6 +106,16 @@ class BrowserUser:
         except TimeoutException:
             return False
 
+    def wait_until_element_visible(self, xpath: str, timeout_seconds: int) -> bool:
+        try:
+            if WebDriverWait(self.driver, timeout_seconds).until(
+                    expected_conditions.visibility_of_element_located((By.XPATH, xpath))
+                ):
+                return True
+            return False
+        except TimeoutException:
+            return False
+
     def wait_until_element_invisible(self, xpath: str, timeout_seconds: int) -> bool:
         try:
             if WebDriverWait(self.driver, timeout_seconds).until(
