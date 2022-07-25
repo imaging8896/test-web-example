@@ -1,4 +1,5 @@
 # test-web-example
+![Test Result](https://github.com/imaging8896/test-web-example/actions/workflows/ci.yml/badge.svg?branch=main)
 It's an example automated test for a web. 
 
 ## Prerequisite
